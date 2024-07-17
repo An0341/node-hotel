@@ -1,8 +1,11 @@
 const express = require('express')
 const app = express();
 const db=require('./db');
+require('dotenv').config();
+
 const bodyParser = require('body-parser');
 app.use(bodyParser.json());
+
 
 const MenuItem=require('./models/Menu');
 
@@ -31,8 +34,10 @@ app.use('/menu',menuRoutes);
 // {
 //     res.send('result is saved');
 // })
+const PORT = process.env.PORT || 3000;
 
-app.listen(3000,()=>{
+
+app.listen(PORT,()=>{
     console.log('server is live');
 }) //it is the port number of server
 

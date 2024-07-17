@@ -1,57 +1,45 @@
-const express = require('express')
+const express = require("express");
 const app = express();
-const db=require('./db');
-require('dotenv').config();
+const db = require("./db");
+require("dotenv").config();
+const passport = require("./auth.js");
+// const LocalStrategy = require("passport-local").Strategy;
 
-const bodyParser = require('body-parser');
+const bodyParser = require("body-parser");
 app.use(bodyParser.json());
-
-
-const MenuItem=require('./models/Menu');
-
-const Person=require('./models/person');
-
-app.get('/', function (req, res) {
-  res.send('welcome to hotel');
-})
-
-
-
-
-
-
-
-
-
-const personRoutes=require('./routes/personRoutes');
-app.use('/person',personRoutes);
-
-const menuRoutes=require('./routes/menuRoutes');
-app.use('/menu',menuRoutes);
-
-
-// app.post('/items',function(req,res)
-// {
-//     res.send('result is saved');
-// })
 const PORT = process.env.PORT || 3000;
 
+//middleware function
+const logRequest = (req, res, next) => {
+  console.log(
+    `[${new Date().toLocaleString()}] Request Made to : ${req.originalUrl}`
+  );
+  next(); // Move on to the next phase
+};
+app.use(logRequest);
 
-app.listen(PORT,()=>{
-    console.log('server is live');
-}) //it is the port number of server
-
-
-
-
-
-
-
-
-
+app.use(passport.initialize());
+const localauthstartegy = passport.authenticate("local", { session: false });
 
 
 
+const MenuItem = require("./models/Menu");
+
+const Person = require("./models/person");
+
+app.get("/", function (req, res) {
+  res.send("welcome to hotel");
+});
+
+const personRoutes = require("./routes/personRoutes");
+const menuRoutes = require("./routes/menuRoutes");
+
+app.use("/person", personRoutes);
+app.use("/menu", menuRoutes);
+
+app.listen(PORT, () => {
+  console.log("server is live");
+}); 
 
 
 
@@ -67,6 +55,14 @@ app.listen(PORT,()=>{
 
 
 
+
+
+
+
+
+
+
+//it is the port number of server
 
 // app.get('/vadapav', function (req, res) {
 //   res.send('rohit sharma');
@@ -74,9 +70,9 @@ app.listen(PORT,()=>{
 
 // app.get('/chole', function (req, res) {
 //   res.send('shikhar dhawan');
-// })  
+// })
 
-// app.get('/idli',function (req,res) 
+// app.get('/idli',function (req,res)
 // {    var customized_idli=
 //   {
 //       "name":"rawa dili",
@@ -95,22 +91,14 @@ app.listen(PORT,()=>{
 //  console.log(jsonStringified); // Output: {"name": "Alice", "age":25}
 // console.log(typeof jsonStringified);
 
-
 // var notes=require('./notes.js');
 // console.log(notes.age);
 // console.log(notes.addnumber(notes.age,9));
-
-
-
 
 // var _=require('lodash');
 // var array=["number","number",1,2,2,1,"age"];
 // var result=_.uniq(array);
 // console.log(result);
-
-
-
-
 
 // const add=function(a,b,abhi){
 //     var result=a+b;
